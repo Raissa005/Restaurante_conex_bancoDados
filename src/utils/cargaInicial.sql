@@ -54,3 +54,45 @@ insert into cardapio (id, ativo, descricao, nome, turno)
 	('73b1c8a5-a970-4635-bc2d-5527da7e2c5c', true, 'cardapio para manhã', 'café da manhã', 1),
  	('1e0f060a-e49b-4cde-809e-8c503922c9da', true, 'cardapio para tarde', 'almoço', 2),
  	('ce7ed8e0-0894-4634-8703-e5464ee9fcbc', true, 'cardapio para noite', 'janta', 3)
+
+
+create table qtd_produto (
+    qtdProduto integer not null primary key
+);
+
+create table cliente (
+	id UUID not null primary key,
+	nome varchar(100) not null,
+	telefone varchar(11) not null
+);
+
+create table endereco (
+	id UUID not null primary key,
+	endereco varchar(100) not null,
+	numero decimal not null,
+	bairro varchar(300) not null,
+	cidade varchar(100) not null
+);
+
+create table met_pagamento (
+	id integer not null primary key,
+	descricao varchar not null
+);
+
+create table rl_cliente_endereco(
+	id_cliente uuid not null references cliente(id),
+	id_endereco uuid not null references endereco(id)	
+);
+
+create table ped_delivery(
+    numPedido serial primary key ,
+    total decimal not null,
+   id_met_pagamento integer not null references metodo_pgt(id),
+    id_cliente uuid not null references cliente(id) ); 
+
+create table rl_pedDelivery_com_bebida(
+    id_pedido integer references ped_delivery,
+    id_comida uuid references comida(id),
+    id_bebida uuid references bebida(id),
+    qtd_produto integer not null
+);
